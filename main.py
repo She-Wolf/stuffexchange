@@ -19,14 +19,26 @@ def reply_all_message(message):
     if message.text == 'Добавить вещь':
         bot.send_message(message.chat.id, 'Введи название вещи')
     elif message.text == 'Найти вещь':
-        keyboard = telebot.types.InlineKeyboardMarkup()
-        exchange_button = telebot.types.InlineKeyboardButton(text='Обменяться', url='https://www.google.com/')
-        keyboard.add(exchange_button)
-        img = open('sn.jpg', 'rb')
-        bot.send_photo(message.chat.id, img, 'Кроссовки', reply_markup=keyboard)
+        exchange_item()
+#         img = open('sn.jpg', 'rb')
+#         bot.send_photo(message.chat.id, img, 'Кроссовки', reply_markup=keyboard)
     else:
         print(f'Упаковываем вещь {message.text} в список юзера {message.chat.username}')
 
+       
+
+def exchange_item(message):  
+    keyboard = telebot.types.InlineKeyboardMarkup()  
+    keyboard.row(  
+        telebot.types.InlineKeyboardButton('Хочу эту вещь!', callback_data='exchange-item'),
+        telebot.types.InlineKeyboardButton('Пропустить', callback_data='next')
+    )  
+  
+    bot.send_message(  
+        message.chat.id,   
+        'Вы хотите обменяться на этот предмет или смотрим дальше?',  
+        reply_markup=keyboard  
+    )
 
 if __name__ == '__main__':
      bot.infinity_polling()
