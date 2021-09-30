@@ -1,8 +1,9 @@
 import config
 import telebot
 
-bot = telebot.TeleBot(config.token)
 
+bot = telebot.TeleBot(config.token)
+item_list = {chat.id : {item}}
 @bot.message_handler(commands=['start'])
 def start_message(message):
     keyboard = telebot.types.ReplyKeyboardMarkup(True)
@@ -13,11 +14,11 @@ def start_message(message):
     Нажми “Найти вещь” и я пришлю тебе фотографии вещей для обмена. Понравилась вещь - пиши “Обменяться”, нет - снова нажимай “Найти вещь”.
     Нажал “Обменяться”? - если владельцу вещи понравится что-то из твоих вещей, то я пришлю контакты вам обоим.''', reply_markup=keyboard)
 
-
+    
 @bot.message_handler(content_types=['text'])
 def reply_all_message(message):
     if message.text == 'Добавить вещь':
-        bot.send_message(message.chat.id, 'Введи название вещи')
+        add_item()
     elif message.text == 'Найти вещь':
         exchange_item()
 #         img = open('sn.jpg', 'rb')
@@ -26,7 +27,13 @@ def reply_all_message(message):
         print(f'Упаковываем вещь {message.text} в список юзера {message.chat.username}')
 
        
-
+def add_item(message):
+    bot.send_message(message.chat.id, 'Введи название вещи')
+    item_name = message.text
+    bot.send_message(message.chat.id, 'Добавь картинку')
+    current_item = { name:item_name, img:item_img}
+    item.update(current_item)
+    
 def exchange_item(message):  
     keyboard = telebot.types.InlineKeyboardMarkup()  
     keyboard.row(  
